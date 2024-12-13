@@ -16,7 +16,6 @@
         --primary-color-dark: #00251a;
         --primary-color-light: #80cbc4;
         --white: #ffffff;
-        --max-width: 1000px;
       }
 
       body {
@@ -42,26 +41,8 @@
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-width: var(--max-width);
+        max-width: 100%;
         margin: 20px auto;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .main-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: space-between;
-      }
-
-      .form-container,
-      .result-container {
-        flex: 1;
-        min-width: 300px;
-        margin: auto;
       }
 
       h2 {
@@ -92,22 +73,6 @@
         color: var(--white);
         padding: 15px 0;
         text-align: center;
-        margin-top: 20px;
-      }
-
-      @media (max-width: 768px) {
-        .container {
-          padding: 15px;
-          margin: 20px;
-          box-sizing: border-box;
-          width: calc(100% - 40px);
-        }
-      }
-
-      @media (min-width: 992px) {
-        .main-row {
-          gap: 30px;
-        }
       }
     </style>
   </head>
@@ -123,9 +88,9 @@
 
     <!-- Main container -->
     <div class="container">
-      <div class="main-row">
+      <div class="row g-4">
         <!-- Form container -->
-        <div class="form-container px-3 py-4">
+        <div class="col-lg-6 col-md-12">
           <h2 class="text-primary">Input Features</h2>
           <form action="/predict" method="post">
             <div class="row">
@@ -205,7 +170,7 @@
               <div class="col-md-6 col-12 text-center mb-3 mb-md-0">
                 <button
                   type="submit"
-                  class="btn btn-primary btn-lg"
+                  class="btn btn-primary btn-lg w-100"
                 >
                   Predict Yield
                 </button>
@@ -213,7 +178,7 @@
               <div class="col-md-6 col-12 text-center">
                 <a
                   href="/"
-                  class="btn btn-outline-danger btn-lg"
+                  class="btn btn-outline-danger btn-lg w-100"
                   style="text-decoration: none"
                 >
                   Clear Input
@@ -224,7 +189,7 @@
         </div>
 
         <!-- Result container -->
-        <div class="result-container">
+        <div class="col-lg-6 col-md-12">
           {% if prediction %}
           <h2 class="text-success text-center">Prediction Result</h2>
           <div class="text-center">
