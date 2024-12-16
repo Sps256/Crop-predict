@@ -1,309 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crop Yield Prediction</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-    crossorigin="anonymous"
-  />
-  <style>
-    :root {
-      --primary-color: #004d40;
-      --primary-color-dark: #00251a;
-      --primary-color-light: #80cbc4;
-      --white: #ffffff;
-      --max-width: 1000px;
-    }
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crop Yield Prediction</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --primary-color: #004d40;
+        --primary-color-dark: #00251a;
+        --primary-color-light: #80cbc4;
+        --white: #ffffff;
+        --max-width: 1000px;
+      }
 
-    body {
-      background: var(--primary-color-light);
-      color: var(--primary-color-dark);
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+      body {
+        background: var(--primary-color-light);
+        color: var(--primary-color-dark);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-    .navbar {
-      background: var(--primary-color);
-    }
+      .navbar {
+        background: var(--primary-color);
+      }
 
-    .navbar-brand {
-      font-weight: bold;
-      color: var(--white);
-    }
+      .navbar-brand {
+        font-weight: bold;
+        color: var(--white);
+      }
 
-    .container {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      max-width: var(--max-width);
-      margin: 20px auto;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+      .container {
+        background: var(--white);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: var(--max-width);
+        margin: 20px auto;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
 
-    h2 {
-      color: var(--primary-color-dark);
-    }
+      .main-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
+      }
 
-    .btn-primary {
-      background: var(--primary-color);
-      border: none;
-    }
+      .form-container,
+      .result-container {
+        flex: 1;
+        min-width: 300px;
+        margin: auto;
+      }
 
-    .btn-primary:hover {
-      background: var(--primary-color-dark);
-    }
-  </style>
-</head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light mb-4">
-    <div class="container-fluid justify-content-center">
-      <a href="#" class="navbar-brand text-center display-6">
-        Crop Yield Prediction 🌾
-      </a>
+      h2 {
+        color: var(--primary-color-dark);
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-color-dark);
+      }
+
+      .btn-outline-danger {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .btn-outline-danger:hover {
+        background: var(--primary-color-light);
+        color: var(--white);
+      }
+
+      footer {
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 15px 0;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+          margin: 20px;
+          box-sizing: border-box;
+          width: calc(100% - 40px);
+        }
+      }
+
+      @media (min-width: 992px) {
+        .main-row {
+          gap: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light mb-4">
+      <div class="container-fluid justify-content-center">
+        <a href="#" class="navbar-brand text-center display-6">
+          Crop Yield Prediction 🌾
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main container -->
+    <div class="container">
+      <div class="main-row">
+        <!-- Form container -->
+        <div class="form-container px-3 py-4">
+          <h2 class="text-primary">Input Features</h2>
+          <form action="/predict" method="post">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="Year" class="form-label">Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Year"
+                  value="2013"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label
+                  for="average_rain_fall_mm_per_year"
+                  class="form-label"
+                >
+                  Average Rainfall (mm/year)
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="average_rain_fall_mm_per_year"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <label for="pesticides_tonnes" class="form-label">
+                  Pesticides (tonnes)
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="pesticides_tonnes"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="avg_temp" class="form-label">
+                  Average Temperature (°C)
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="avg_temp"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <label for="Area" class="form-label">Region</label>
+                <select class="form-select" name="Area" required>
+                  <option value="" selected disabled>Select a Region</option>
+                  <option value="Albania">Albania</option>
+                  <option value="Algeria">Algeria</option>
+                  <option value="Angola">Angola</option>
+                  <option value="Argentina">Argentina</option>
+                  <option value="Armenia">Armenia</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Austria">Austria</option>
+                  <option value="Azerbaijan">Azerbaijan</option>
+                  <option value="Bangladesh">Bangladesh</option>
+                  <option value="Belarus">Belarus</option>
+                  <option value="Belgium">Belgium</option>
+                  <option value="Benin">Benin</option>
+                  <option value="Bhutan">Bhutan</option>
+                  <option value="Bolivia (Plurinational State of)">Bolivia (Plurinational State of)</option>
+                  <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                  <option value="Brazil">Brazil</option>
+                  <option value="Bulgaria">Bulgaria</option>
+                  <option value="Burkina Faso">Burkina Faso</option>
+                  <option value="Burundi">Burundi</option>
+                  <option value="Cabo Verde">Cabo Verde</option>
+                  <option value="Cambodia">Cambodia</option>
+                  <option value="Cameroon">Cameroon</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Central African Republic">Central African Republic</option>
+                  <option value="Chad">Chad</option>
+                  <option value="Chile">Chile</option>
+                  <option value="China">China</option>
+                  <option value="Colombia">Colombia</option>
+                  <option value="Congo">Congo</option>
+                  <option value="Costa Rica">Costa Rica</option>
+                  <option value="Croatia">Croatia</option>
+                  <option value="Cuba">Cuba</option>
+                  <option value="Cyprus">Cyprus</option>
+                  <option value="Czechia">Czechia</option>
+                  <option value="Denmark">Denmark</option>
+                  <option value="Dominican Republic">Dominican Republic</option>
+                  <option value="Ecuador">Ecuador</option>
+                  <option value="Egypt">Egypt</option>
+                  <option value="El Salvador">El Salvador</option>
+                  <option value="Estonia">Estonia</option>
+                  <option value="Eswatini">Eswatini</option>
+                  <option value="Ethiopia">Ethiopia</option>
+                  <option value="Fiji">Fiji</option>
+                  <option value="Finland">Finland</option>
+                  <option value="France">France</option>
+                  <option value="Gabon">Gabon</option>
+                  <option value="Gambia">Gambia</option>
+                  <option value="Georgia">Georgia</option>
+                  <option value="Germany">Germany</option>
+                  <option value="Ghana">Ghana</option>
+                  <option value="Greece">Greece</option>
+                  <option value="Guatemala">Guatemala</option>
+                  <option value="Guinea">Guinea</option>
+                  <option value="Guyana">Guyana</option>
+                  <option value="Haiti">Haiti</option>
+                  <option value="Honduras">Honduras</option>
+                  <option value="Hungary">Hungary</option>
+                  <option value="Iceland">Iceland</option>
+                  <option value="India">India</option>
+                  <option value="Indonesia">Indonesia</option>
+                  <option value="Iran (Islamic Republic of)">Iran (Islamic Republic of)</option>
+                  <option value="Iraq">Iraq</option>
+                  <option value="Ireland">Ireland</option>
+                  <option value="Israel">Israel</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Jamaica">Jamaica</option>
+                  <option value="Japan">Japan</option>
+                  <option value="Jordan">Jordan</option>
+                  <option value="Kazakhstan">Kazakhstan</option>
+                  <option value="Kenya">Kenya</option>
+                  <option value="Kuwait">Kuwait</option>
+                  <option value="Kyrgyzstan">Kyrgyzstan</option>
+                  <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
+                  <option value="Latvia">Latvia</option>
+                  <option value="Lebanon">Lebanon</option>
+                  <option value="Lesotho">Lesotho</option>
+                  <option value="Liberia">Liberia</option>
+                  <option value="Lithuania">Lithuania</option>
+                  <option value="Luxembourg">Luxembourg</option>
+                  <option value="Madagascar">Madagascar</option>
+                  <option value="Malawi">Malawi</option>
+                  <option value="Malaysia">Malaysia</option>
+                  <option value="Maldives">Maldives</option>
+                  <option value="Mali">Mali</option>
+                  <option value="Malta">Malta</option>
+                  <option value="Mauritania">Mauritania</option>
+                  <option value="Mauritius">Mauritius</option>
+                  <option value="Mexico">Mexico</option>
+                  <option value="Mongolia">Mongolia</option>
+                  <option value="Montenegro">Montenegro</option>
+                  <option value="Morocco">Morocco</option>
+                  <option value="Mozambique">Mozambique</option>
+                  <option value="Myanmar">Myanmar</option>
+                  <option value="Namibia">Namibia</option>
+                  <option value="Nepal">Nepal</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="New Zealand">New Zealand</option>
+                  <option value="Nicaragua">Nicaragua</option>
+                  <option value="Niger">Niger</option>
+                  <option value="Nigeria">Nigeria</option>
+                  <option value="Norway">Norway</option>
+                  <option value="Oman">Oman</option>
+                  <option value="Pakistan">Pakistan</option>
+                  <option value="Panama">Panama</option>
+                  <option value="Papua New Guinea">Papua New Guinea</option>
+                  <option value="Paraguay">Paraguay</option>
+                  <option value="Peru">Peru</option>
+                  <option value="Philippines">Philippines</option>
+                  <option value="Poland">Poland</option>
+                  <option value="Portugal">Portugal</option>
+                  <option value="Qatar">Qatar</option>
+                  <option value="Republic of Korea">Republic of Korea</option>
+                  <option value="Romania">Romania</option>
+                  <option value="Russian Federation">Russian Federation</option>
+                  <option value="Rwanda">Rwanda</option>
+                  <option value="Saudi Arabia">Saudi Arabia</option>
+                  <option value="Senegal">Senegal</option>
+                  <option value="Serbia">Serbia</option>
+                  <option value="Sierra Leone">Sierra Leone</option>
+                  <option value="Singapore">Singapore</option>
+                  <option value="Slovakia">Slovakia</option>
+                  <option value="Slovenia">Slovenia</option>
+                  <option value="Somalia">Somalia</option>
+                  <option value="South Africa">South Africa</option>
+                  <option value="South Sudan">South Sudan</option>
+                  <option value="Spain">Spain</option>
+                  <option value="Sri Lanka">Sri Lanka</option>
+                  <option value="Sudan">Sudan</option>
+                  <option value="Sweden">Sweden</option>
+                  <option value="Switzerland">Switzerland</option>
+                  <option value="Syrian Arab Republic">Syrian Arab Republic</option>
+                  <option value="Tajikistan">Tajikistan</option>
+                  <option value="Thailand">Thailand</option>
+                  <option value="Togo">Togo</option>
+                  <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                  <option value="Tunisia">Tunisia</option>
+                  <option value="Turkey">Turkey</option>
+                  <option value="Uganda">Uganda</option>
+                  <option value="Ukraine">Ukraine</option>
+                  <option value="United Arab Emirates">United Arab Emirates</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="United States of America">United States of America</option>
+                  <option value="Uruguay">Uruguay</option>
+                  <option value="Uzbekistan">Uzbekistan</option>
+                  <option value="Venezuela (Bolivarian Republic of)">Venezuela (Bolivarian Republic of)</option>
+                  <option value="Viet Nam">Viet Nam</option>
+                  <option value="Yemen">Yemen</option>
+                  <option value="Zambia">Zambia</option>
+                  <option value="Zimbabwe">Zimbabwe</option>
+
+                  <!-- More options available -->
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="Item" class="form-label">Item</label>
+                <select class="form-select" name="Item" required>
+                  <option value="" selected disabled>Select an Item</option>
+                  <option value="Barley">Barley</option>
+                  <option value="Cassava">Cassava</option>
+                  <option value="Groundnuts">Groundnuts</option>
+                  <option value="Maize">Maize</option>
+                  <option value="Millet">Millet</option>
+                  <option value="Oats">Oats</option>
+                  <option value="Plantains and others">Plantains and others</option>
+                  <option value="Potatoes">Potatoes</option>
+                  <option value="Rice, paddy">Rice, paddy</option>
+                  <option value="Sorghum">Sorghum</option>
+                  <option value="Soybeans">Soybeans</option>
+                  <option value="Sweet potatoes">Sweet potatoes</option>
+                  <option value="Wheat">Wheat</option>
+                  <option value="Yams">Yams</option>
+
+                  <!-- More options available -->
+                </select>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-6 col-12 text-center mb-3 mb-md-0">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-lg"
+                >
+                  Predict Yield
+                </button>
+              </div>
+              <div class="col-md-6 col-12 text-center">
+                <a
+                  href="/"
+                  class="btn btn-outline-danger btn-lg"
+                  style="text-decoration: none"
+                >
+                  Clear Input
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Result container -->
+        <div class="result-container">
+          {% if prediction %}
+          <h2 class="text-success text-center">Prediction Result</h2>
+          <div class="text-center">
+            <h5 class="text-primary">Predicted Yield</h5>
+            <p class="fs-4">{{ prediction }} tonnes</p>
+          </div>
+          {% else %}
+          <h2 class="text-muted text-center">No Prediction Available</h2>
+          <div class="text-center text-muted">
+            <p>
+              Please enter the crop details and click "Predict Yield" to see
+              the result.
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
-  </nav>
 
-  <!-- Main container -->
-  <div class="container">
-    <form action="/predict" method="post">
-      <h2 class="text-primary mb-4">Dynamic Region and Crop Selection</h2>
+    <!-- Footer -->
+    <footer>
+      <p>
+        &copy; <span id="current-year"></span> Fasal Mitra 🌱 All rights reserved.
+      </p>
+    </footer>
 
-      <!-- Region Selection -->
-      <div class="mb-3">
-        <label for="region" class="form-label">Region</label>
-        <select id="region" name="Area" class="form-select" required>
-          <option value="" selected disabled>Select a Region</option>
-          <option value="Albania">Albania</option>
-          <option value="Algeria">Algeria</option>
-          <option value="Angola">Angola</option>
-          <option value="Argentina">Argentina</option>
-          <option value="Armenia">Armenia</option>
-          <option value="Australia">Australia</option>
-          <option value="Austria">Austria</option>
-          <option value="Azerbaijan">Azerbaijan</option>
-          <option value="Bangladesh">Bangladesh</option>
-          <option value="Belarus">Belarus</option>
-          <option value="Belgium">Belgium</option>
-          <option value="Benin">Benin</option>
-          <option value="Bhutan">Bhutan</option>
-          <option value="Bolivia (Plurinational State of)">Bolivia (Plurinational State of)</option>
-          <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
-          <option value="Brazil">Brazil</option>
-          <option value="Bulgaria">Bulgaria</option>
-          <option value="Burkina Faso">Burkina Faso</option>
-          <option value="Burundi">Burundi</option>
-          <option value="Cabo Verde">Cabo Verde</option>
-          <option value="Cambodia">Cambodia</option>
-          <option value="Cameroon">Cameroon</option>
-          <option value="Canada">Canada</option>
-          <option value="Central African Republic">Central African Republic</option>
-          <option value="Chad">Chad</option>
-          <option value="Chile">Chile</option>
-          <option value="China">China</option>
-          <option value="Colombia">Colombia</option>
-          <option value="Congo">Congo</option>
-          <option value="Costa Rica">Costa Rica</option>
-          <option value="Croatia">Croatia</option>
-          <option value="Cuba">Cuba</option>
-          <option value="Cyprus">Cyprus</option>
-          <option value="Czechia">Czechia</option>
-          <option value="Denmark">Denmark</option>
-          <option value="Dominican Republic">Dominican Republic</option>
-          <option value="Ecuador">Ecuador</option>
-          <option value="Egypt">Egypt</option>
-          <option value="El Salvador">El Salvador</option>
-          <option value="Estonia">Estonia</option>
-          <option value="Eswatini">Eswatini</option>
-          <option value="Ethiopia">Ethiopia</option>
-          <option value="Fiji">Fiji</option>
-          <option value="Finland">Finland</option>
-          <option value="France">France</option>
-          <option value="Gabon">Gabon</option>
-          <option value="Gambia">Gambia</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Germany">Germany</option>
-          <option value="Ghana">Ghana</option>
-          <option value="Greece">Greece</option>
-          <option value="Guatemala">Guatemala</option>
-          <option value="Guinea">Guinea</option>
-          <option value="Guyana">Guyana</option>
-          <option value="Haiti">Haiti</option>
-          <option value="Honduras">Honduras</option>
-          <option value="Hungary">Hungary</option>
-          <option value="Iceland">Iceland</option>
-          <option value="India">India</option>
-          <option value="Indonesia">Indonesia</option>
-          <option value="Iran (Islamic Republic of)">Iran (Islamic Republic of)</option>
-          <option value="Iraq">Iraq</option>
-          <option value="Ireland">Ireland</option>
-          <option value="Israel">Israel</option>
-          <option value="Italy">Italy</option>
-          <option value="Jamaica">Jamaica</option>
-          <option value="Japan">Japan</option>
-          <option value="Jordan">Jordan</option>
-          <option value="Kazakhstan">Kazakhstan</option>
-          <option value="Kenya">Kenya</option>
-          <option value="Kuwait">Kuwait</option>
-          <option value="Kyrgyzstan">Kyrgyzstan</option>
-          <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
-          <option value="Latvia">Latvia</option>
-          <option value="Lebanon">Lebanon</option>
-          <option value="Lesotho">Lesotho</option>
-          <option value="Liberia">Liberia</option>
-          <option value="Lithuania">Lithuania</option>
-          <option value="Luxembourg">Luxembourg</option>
-          <option value="Madagascar">Madagascar</option>
-          <option value="Malawi">Malawi</option>
-          <option value="Malaysia">Malaysia</option>
-          <option value="Maldives">Maldives</option>
-          <option value="Mali">Mali</option>
-          <option value="Malta">Malta</option>
-          <option value="Mauritania">Mauritania</option>
-          <option value="Mauritius">Mauritius</option>
-          <option value="Mexico">Mexico</option>
-          <option value="Mongolia">Mongolia</option>
-          <option value="Montenegro">Montenegro</option>
-          <option value="Morocco">Morocco</option>
-          <option value="Mozambique">Mozambique</option>
-          <option value="Myanmar">Myanmar</option>
-          <option value="Namibia">Namibia</option>
-          <option value="Nepal">Nepal</option>
-          <option value="Netherlands">Netherlands</option>
-          <option value="New Zealand">New Zealand</option>
-          <option value="Nicaragua">Nicaragua</option>
-          <option value="Niger">Niger</option>
-          <option value="Nigeria">Nigeria</option>
-          <option value="Norway">Norway</option>
-          <option value="Oman">Oman</option>
-          <option value="Pakistan">Pakistan</option>
-          <option value="Panama">Panama</option>
-          <option value="Papua New Guinea">Papua New Guinea</option>
-          <option value="Paraguay">Paraguay</option>
-          <option value="Peru">Peru</option>
-          <option value="Philippines">Philippines</option>
-          <option value="Poland">Poland</option>
-          <option value="Portugal">Portugal</option>
-          <option value="Qatar">Qatar</option>
-          <option value="Republic of Korea">Republic of Korea</option>
-          <option value="Romania">Romania</option>
-          <option value="Russian Federation">Russian Federation</option>
-          <option value="Rwanda">Rwanda</option>
-          <option value="Saudi Arabia">Saudi Arabia</option>
-          <option value="Senegal">Senegal</option>
-          <option value="Serbia">Serbia</option>
-          <option value="Sierra Leone">Sierra Leone</option>
-          <option value="Singapore">Singapore</option>
-          <option value="Slovakia">Slovakia</option>
-          <option value="Slovenia">Slovenia</option>
-          <option value="Somalia">Somalia</option>
-          <option value="South Africa">South Africa</option>
-          <option value="South Sudan">South Sudan</option>
-          <option value="Spain">Spain</option>
-          <option value="Sri Lanka">Sri Lanka</option>
-          <option value="Sudan">Sudan</option>
-          <option value="Sweden">Sweden</option>
-          <option value="Switzerland">Switzerland</option>
-          <option value="Syrian Arab Republic">Syrian Arab Republic</option>
-          <option value="Tajikistan">Tajikistan</option>
-          <option value="Thailand">Thailand</option>
-          <option value="Togo">Togo</option>
-          <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-          <option value="Tunisia">Tunisia</option>
-          <option value="Turkey">Turkey</option>
-          <option value="Uganda">Uganda</option>
-          <option value="Ukraine">Ukraine</option>
-          <option value="United Arab Emirates">United Arab Emirates</option>
-          <option value="United Kingdom">United Kingdom</option>
-          <option value="United States of America">United States of America</option>
-          <option value="Uruguay">Uruguay</option>
-          <option value="Uzbekistan">Uzbekistan</option>
-          <option value="Venezuela (Bolivarian Republic of)">Venezuela (Bolivarian Republic of)</option>
-          <option value="Viet Nam">Viet Nam</option>
-          <option value="Yemen">Yemen</option>
-          <option value="Zambia">Zambia</option>
-          <option value="Zimbabwe">Zimbabwe</option>
-
-        </select>
-      </div>
-
-      <!-- Crop Selection -->
-      <div class="mb-3">
-        <label for="item" class="form-label">Item</label>
-        <select id="item" name="Item" class="form-select" required>
-          <option value="" selected disabled>Select a Crop</option>
-        </select>
-      </div>
-
-      <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary">Predict Yield</button>
-    </form>
-  </div>
-
-  <footer class="mt-4 text-center">
-    <p>
-      &copy; <span id="current-year"></span> Fasal Mitra 🌱 All rights reserved.
-    </p>
-  </footer>
-
-  <script>
-    // Region to Crops Mapping
-    const regionToCrops = {
-      "India": ["Rice", "Wheat", "Maize", "Millet", "Sugarcane", "Cotton", "Pulses", "Tea", "Coffee", "Jute"],
-      "USA": ["Corn", "Soybeans", "Wheat", "Barley", "Cotton", "Rice", "Sorghum", "Alfalfa", "Potatoes", "Tomatoes"],
-      "China": ["Rice", "Wheat", "Corn", "Soybeans", "Tea", "Cotton", "Barley", "Sweet Potatoes", "Sugarcane", "Peanuts"],
-      "Brazil": ["Soybeans", "Sugarcane", "Coffee", "Corn", "Cotton", "Cassava", "Rice", "Wheat", "Oranges", "Bananas"],
-      "Australia": ["Wheat", "Barley", "Cotton", "Oats", "Canola", "Sugarcane", "Lentils", "Chickpeas", "Grapes", "Almonds"],
-      "Russia": ["Wheat", "Barley", "Sunflower Seeds", "Corn", "Oats", "Rye", "Potatoes", "Sugar Beets", "Buckwheat", "Peas"],
-      "Canada": ["Wheat", "Canola", "Barley", "Oats", "Lentils", "Soybeans", "Corn", "Potatoes", "Flaxseed", "Mustard"],
-      "Argentina": ["Soybeans", "Corn", "Wheat", "Barley", "Sunflower Seeds", "Rice", "Cotton", "Peanuts", "Sorghum", "Grapes"],
-      "France": ["Wheat", "Barley", "Maize", "Rapeseed", "Sugar Beets", "Grapes", "Potatoes", "Oats", "Tomatoes", "Apples"],
-      "Germany": ["Wheat", "Barley", "Potatoes", "Rye", "Rapeseed", "Sugar Beets", "Oats", "Corn", "Asparagus", "Apples"],
-      "Italy": ["Wheat", "Olives", "Grapes", "Tomatoes", "Barley", "Corn", "Oranges", "Rice", "Almonds", "Lemons"],
-      "Spain": ["Wheat", "Barley", "Olives", "Grapes", "Oranges", "Tomatoes", "Corn", "Almonds", "Lemons", "Peaches"],
-      "South Africa": ["Corn", "Wheat", "Sugarcane", "Sunflowers", "Citrus", "Grapes", "Sorghum", "Barley", "Potatoes", "Avocados"],
-      "Indonesia": ["Rice", "Palm Oil", "Coconuts", "Rubber", "Cassava", "Cocoa", "Tea", "Coffee", "Sugarcane", "Maize"],
-      "Nigeria": ["Cassava", "Yams", "Maize", "Rice", "Sorghum", "Millet", "Cocoa", "Palm Oil", "Groundnuts", "Cowpeas"],
-      "Mexico": ["Corn", "Sugarcane", "Avocados", "Beans", "Wheat", "Tomatoes", "Chili Peppers", "Coffee", "Bananas", "Oranges"],
-      "Egypt": ["Rice", "Wheat", "Cotton", "Maize", "Barley", "Sugarcane", "Tomatoes", "Oranges", "Dates", "Olives"],
-      "Turkey": ["Wheat", "Barley", "Cotton", "Sunflowers", "Grapes", "Hazelnuts", "Olives", "Tomatoes", "Cherries", "Figs"],
-      "Japan": ["Rice", "Soybeans", "Tea", "Wheat", "Barley", "Sweet Potatoes", "Cabbage", "Apples", "Mandarins", "Pears"],
-      "Pakistan": ["Wheat", "Cotton", "Rice", "Sugarcane", "Maize", "Barley", "Chickpeas", "Mangoes", "Oranges", "Dates"]
-    };
-
-    // References to the dropdowns
-    const regionDropdown = document.getElementById("region");
-    const itemDropdown = document.getElementById("item");
-
-    // Event Listener to Populate Crops
-    regionDropdown.addEventListener("change", () => {
-      const selectedRegion = regionDropdown.value;
-      const crops = regionToCrops[selectedRegion] || [];
-
-      // Clear existing options
-      itemDropdown.innerHTML = '<option value="" selected disabled>Select a Crop</option>';
-
-      // Add new options
-      crops.forEach(crop => {
-        const option = document.createElement("option");
-        option.value = crop;
-        option.textContent = crop;
-        itemDropdown.appendChild(option);
-      });
-    });
-
-    // Set current year in footer
-    document.getElementById("current-year").innerText = new Date().getFullYear();
-  </script>
-</body>
+    <script>
+      document.getElementById("current-year").innerText =
+        new Date().getFullYear();
+    </script>
+  </body>
 </html>
