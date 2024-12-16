@@ -1,18 +1,29 @@
-from flask import Flask,request, render_template
+from flask import Flask, request, render_template
 import numpy as np
 import pickle
 import sklearn
-print(sklearn.__version__)
-#loading models
-dtr = pickle.load(open('dtr.pkl','rb'))
-preprocessor = pickle.load(open('preprocessor.pkl','rb'))
 
-#flask app
+print(sklearn.__version__)
+
+# Loading models
+dtr = pickle.load(open('dtr.pkl', 'rb'))
+preprocessor = pickle.load(open('preprocessor.pkl', 'rb'))
+
+# Flask app
 app = Flask(__name__)
+
+# Dictionary of regions and crops
+regions_and_items = {
+    "North": ["Wheat", "Rice", "Barley"],
+    "South": ["Sugarcane", "Coconut", "Banana"],
+    "East": ["Tea", "Jute", "Rice"],
+    "West": ["Cotton", "Groundnut", "Millets"],
+}
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', regions_and_items=regions_and_items)
+
 @app.route("/predict", methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -27,8 +38,7 @@ def predict():
         transformed_features = preprocessor.transform(features)
         prediction = dtr.predict(transformed_features).reshape(1, -1)
 
-        return render_template('index.html', prediction=prediction[0][0])
+        return render_template('index.html', prediction=prediction[0][0], regions_and_items=regions_and_items)
 
-
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(debug=True)
