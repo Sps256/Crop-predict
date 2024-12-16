@@ -182,16 +182,22 @@
 
             <div class="row mt-3">
               <div class="col-md-6">
-                <label for="region" class="form-label">Region</label>
-                <select id="region" name="Area" class="form-control" required>
-                  <option value="" disabled selected>Choose a region</option>
-                </select>
+                <label for="Area" class="form-label">Region</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="Area"
+                  required
+                />
               </div>
               <div class="col-md-6">
-                <label for="item" class="form-label">Crop</label>
-                <select id="item" name="Item" class="form-control" required>
-                  <option value="" disabled selected>Choose a crop</option>
-                </select>
+                <label for="Item" class="form-label">Item</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="Item"
+                  required
+                />
               </div>
             </div>
 
@@ -246,49 +252,8 @@
     </footer>
 
     <script>
-      // Data for dynamic dropdowns
-      const data = {
-        {% for region, crops in regions_and_items.items() %}
-        "{{ region }}": [
-          {% for crop in crops %}
-          "{{ crop }}",
-          {% endfor %}
-        ],
-        {% endfor %}
-      };
-
-      const regionSelect = document.getElementById("region");
-      const itemSelect = document.getElementById("item");
-
-      // Populate regions
-      Object.keys(data).forEach((region) => {
-        const option = document.createElement("option");
-        option.value = region;
-        option.textContent = region;
-        regionSelect.appendChild(option);
-      });
-
-      // Update items based on region
-      regionSelect.addEventListener("change", (event) => {
-        const selectedRegion = event.target.value;
-
-        // Clear current items
-        itemSelect.innerHTML = "<option value='' disabled selected>Choose a crop</option>";
-
-        // Populate items for the selected region
-        data[selectedRegion].forEach((item) => {
-          const option = document.createElement("option");
-          option.value = item;
-          option.textContent = item;
-          itemSelect.appendChild(option);
-        });
-      });
-
-      // Trigger change event to set initial items
-      regionSelect.dispatchEvent(new Event("change"));
-
-      // Update year dynamically in the footer
-      document.getElementById("current-year").innerText = new Date().getFullYear();
+      document.getElementById("current-year").innerText =
+        new Date().getFullYear();
     </script>
   </body>
 </html>
